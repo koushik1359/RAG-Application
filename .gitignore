@@ -1,0 +1,15 @@
+# Python Environments
+venv/
+venv2/
+.env
+
+# Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# User Documents
+documents/
+
+# Logs
+*.log

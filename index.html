@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise RAG | Knowledge Base</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1; /* Indigo */
+            --primary-hover: #4f46e5;
+            --bg-body: #0f172a; /* Slate 900 */
+            --bg-chat: #1e293b; /* Slate 800 */
+            --text-main: #f8fafc; /* Slate 50 */
+            --text-muted: #94a3b8; /* Slate 400 */
+            --border: #334155; /* Slate 700 */
+            --user-bubble: #6366f1;
+            --ai-bubble: #334155;
+            --source-card: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-wrapper {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background-color: var(--bg-chat);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        /* --- HEADER --- */
+        .header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981; /* Emerald */
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- MESSAGE AREA --- */
+        .message-area {
+            flex-grow: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+            animation: fade-in 0.3s ease-out;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user { align-self: flex-end; }
+        .message.ai { align-self: flex-start; }
+
+        .bubble {
+            padding: 16px 20px;
+            border-radius: 12px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+
+        .user .bubble {
+            background-color: var(--user-bubble);
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai .bubble {
+            background-color: var(--ai-bubble);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        /* Formatting for AI Responses */
+        .bubble p { margin: 0 0 12px 0; }
+        .bubble p:last-child { margin: 0; }
+        .bubble strong { color: #fff; }
+
+        /* --- SOURCES CITED --- */
+        .sources-container {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .source-card {
+            background-color: var(--source-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 0.85rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .source-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .source-header {
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .source-snippet {
+            color: var(--text-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        /* --- INPUT AREA --- */
+        .input-area {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            background-color: var(--bg-chat);
+        }
+
+        .input-box {
+            display: flex;
+            gap: 12px;
+            background-color: var(--bg-body);
+            padding: 8px 8px 8px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .input-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        textarea {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 8px 0;
+            resize: none;
+            height: 44px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        textarea::placeholder { color: var(--text-muted); }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        button:hover { background-color: var(--primary-hover); }
+        button:disabled {
+            background-color: var(--border);
+            cursor: not-allowed;
+            color: var(--text-muted);
+        }
+
+        /* --- TYPING LOADER --- */
+        .loader {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 20px;
+            background-color: var(--ai-bubble);
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
+            border: 1px solid var(--border);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-muted);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+    </style>
+</head>
+<body>
+
+    <div class="chat-wrapper">
+        <!-- Header -->
+        <div class="header">
+            <div class="status-indicator"></div>
+            <h1>Enterprise Knowledge Base API</h1>
+        </div>
+
+        <!-- Messages -->
+        <div class="message-area" id="chatbox">
+            <div class="message ai">
+                <div class="bubble">
+                    <p>Hello! I am connected to your Pinecone Vector Database.</p>
+                    <p>I have processed your uploaded PDFs and am ready to answer your questions. I will automatically search the documents and cite my sources for every answer.</p>
+                </div>
+            </div>
+            
+            <div class="loader" id="loader">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="input-area">
+            <div class="input-box">
+                <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="handleFileUpload(event)">
+                <button id="uploadBtn" onclick="document.getElementById('fileInput').click()" title="Upload Document" style="background-color: transparent; color: var(--text-muted);">
+                    <i class="fas fa-paperclip" style="font-size: 1.2rem;"></i>
+                </button>
+                <textarea id="userInput" placeholder="Ask a question about your documents..." onkeydown="handleEnter(event)"></textarea>
+                <button id="sendBtn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface Logic -->
+    <script>
+        // The FastAPI Backend URL
+        const API_URL = "http://localhost:8000/chat";
+
+        const API_UPLOAD_URL = "http://localhost:8000/upload";
+
+        const chatbox = document.getElementById("chatbox");
+        const userInput = document.getElementById("userInput");
+        const sendBtn = document.getElementById("sendBtn");
+        const loader = document.getElementById("loader");
+        const uploadBtn = document.getElementById("uploadBtn");
+        const fileInput = document.getElementById("fileInput");
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Show Loading State
+            loader.style.display = 'flex';
+            chatbox.appendChild(loader);
+            scrollToBottom();
+            
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+            uploadBtn.disabled = true;
+            appendMessage(`Uploading and processing: ${file.name}...`, 'user');
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch(API_UPLOAD_URL, {
+                    method: 'POST',
+                    body: formData // No Content-Type header needed, browser sets it automatically with boundary
+                });
+
+                const data = await response.json();
+                loader.style.display = 'none';
+
+                if (data.success) {
+                    appendMessage(`✅ ${data.message}`, 'ai');
+                } else {
+                    appendMessage(`⚠️ Failed to process Document: ${data.message}`, 'ai');
+                }
+
+            } catch (error) {
+                loader.style.display = 'none';
+                appendMessage(`⚠️ Error uploading file: ${error.message}`, 'ai');
+            } finally {
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                uploadBtn.disabled = false;
+                fileInput.value = ""; // Reset file input
+                userInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        function scrollToBottom() {
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Formats the response text from the LLM (handles bolding and line breaks)
+        function formatText(text) {
+            let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\n\n/g, '</p><p>');
+            formatted = formatted.replace(/\n/g, '<br>');
+            return `<p>${formatted}</p>`;
+        }
+
+        // Builds the HTML for the source snippet cards
+        function buildSourcesHTML(sources) {
+            if (!sources || sources.length === 0) return '';
+            
+            let html = '<div class="sources-container">';
+            sources.forEach((src) => {
+                // Extract just the filename from the path
+                const pathParts = src.source.split(/[/\\]/);
+                const fileName = pathParts[pathParts.length - 1];
+                
+                html += `
+                    <div class="source-card">
+                        <div class="source-header">
+                            <i class="fas fa-file-pdf"></i>
+                            ${fileName} (Page ${src.page})
+                        </div>
+                        <div class="source-snippet">"${src.content}"</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 1. Add User's Question to UI
+            appendMessage(text, 'user');
+            userInput.value = '';
+            
+            // 2. Show Loading State
+            loader.style.display = 'flex';
+            chatbox.appendChild(loader);
+            scrollToBottom();
+            
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+
+            try {
+                // 3. Send POST request to FastAPI
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text }) // Must match ChatRequest Pydantic model
+                });
+
+                if (!response.ok) {
+                    throw new Error("Unable to reach the FastAPI server. Ensure 'uvicorn app:app --reload' is running.");
+                }
+
+                // 4. Parse the Answer and Sources
+                const data = await response.json();
+                
+                loader.style.display = 'none';
+                appendMessage(data.answer, 'ai', data.sources);
+
+            } catch (error) {
+                loader.style.display = 'none';
+                appendMessage(`⚠️ Error: ${error.message}`, 'ai');
+            } finally {
+                // 5. Re-enable input
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                userInput.focus();
+                scrollToBottom();
+            }
+        }
+
+        function appendMessage(text, sender, sources = []) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            
+            let innerHTML = `<div class="bubble">${formatText(text)}</div>`;
+            
+            if (sources.length > 0) {
+                innerHTML += buildSourcesHTML(sources);
+            }
+
+            msgDiv.innerHTML = innerHTML;
+            
+            // Insert the message right above the hidden loader
+            chatbox.insertBefore(msgDiv, loader);
+        }
+    </script>
+</body>
+</html>
