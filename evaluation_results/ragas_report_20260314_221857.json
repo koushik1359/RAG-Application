@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-03-14T22:18:57.612955",
+  "num_questions": 2,
+  "overall_scores": {
+    "faithfulness": 0.875,
+    "answer_relevancy": 0.9944,
+    "context_precision": 1.0
+  },
+  "average_latency_seconds": 3.67,
+  "per_question_results": [
+    {
+      "question": "What are the technical skills listed in the resume?",
+      "answer": "The technical skills listed in the resume are as follows:\n- Programming & Data Processing: Python, SQL, Pandas, PySpark, Data Transformation\n- Databases & Storage: PostgreSQL, Azure SQL, SQL Server, Azure Data Lake\n- Cloud Platforms: Microsoft Azure, Azure Machine Learning, Azure Databricks\n- MLOps & Experiment Tracking: MLflow, Azure ML Workspace, Model Registry, Managed Endpoints\n- Analytics & Machine Learning: Scikit-learn, XGBoost, Random Forest, CNN, ANN, ResNet\n- Tools & Version Control: Git, GitHub\n- APIs & Frameworks: REST APIs, FastAPI\n- GenAI Systems: LangGraph, LLM Agents, Retrieval Workflows\n\n(Source: Resume_Koushik_Manjunathan_Sreevatsa.pdf, page 1)",
+      "contexts": [
+        "Koushik Manjunathan Sreevatsa\n\u2642phone(470) 680 - 6311 \u2014/envel\u2322pekoushiksreevatsa100@gmail.com \u2014/linkedinLinkedIn\nAI Engineer with experience buildingLLM-powered systems, machine learning models, and intelligent analytics plat-\nformsusing Python, Databricks, and Azure. Skilled in developingmulti-agent GenAI systems, ML pipelines, and scalable\ndata workflowsto automate analysis and support decision-making. Experienced withLangGraph, PySpark, Azure Machine\nLearning, and MLflowfor building production-oriented AI solutions.\nEDUCATION\nMaster of Science in Data Science and Analytics \u2014 GPA: 4.13 05/2025\nGeorgia State University , Atlanta, GA\nRelevant Coursework:Database Systems, Machine Learning, Big Data Programming, Data Mining, Computational Intelligence\nTECHNICAL SKILLS\n\u2013Programming & Data Processing:Python, SQL, Pandas,\nPySpark, Data Transformation\n\u2013Databases & Storage:PostgreSQL, Azure SQL, SQL Server,\nAzure Data Lake\n\u2013Cloud Platforms:Microsoft Azure, Azure Machine Learning,",
+        "Azure Data Lake\n\u2013Cloud Platforms:Microsoft Azure, Azure Machine Learning,\nAzure Databricks\n\u2013MLOps & Experiment Tracking:MLflow, Azure ML\nWorkspace, Model Registry , Managed Endpoints\n\u2013Analytics & Machine Learning:Scikit-learn, XGBoost, Ran-\ndom Forest, CNN, ANN, ResNet\n\u2013Tools & Version Control:Git, GitHub\n\u2013APIs & Frameworks:REST APIs, FastAPI\n\u2013GenAI Systems:LangGraph, LLM Agents, Retrieval Work-\nflows\nPROFESSIONAL EXPERIENCE\nBeedata Technology \u2014 Software Engineer (Data & AI) 06/2025 \u2013 10/2025\n\u2013 Architected and deployed amulti-agent GenAI decision-support systemon Databricks usingLangGraphenabling event\nplanning teams to query SQL-backed datasets using natural language.\n\u2013 DevelopedLLM-powered SQL agentsto automate analysis of operational data and generate insights for event planning\nand venue performance analysis.\n\u2013 Generated recommendations forinventory optimization, product stocking, and fan engagement improvements.",
+        "Decision Tree, and XGBoost models.\n\u2013 Achieved83% F1-score and 89% ROC-AUCand deployed the best model usingAzure ML Managed Online Endpoints.\nInsurance Fraud Detection \u2014 Azure Databricks, PySpark\n\u2013 Built a scalable machine learning pipeline usingPySpark on Azure Databricksto analyze15,420+ insurance claims\nwith 33 features.\n\u2013 Applied categorical encoding techniques includingWeight of Evidence (WOE)and mean encoding to improve model\nlearning.\n\u2013 Trained classification models achieving anF1-score of 0.846.\nACADEMIC EXPERIENCE\nGraduate Teaching Assistant \u2014 Georgia State University 08/2023 \u2013 05/2025\n\u2013 Supported students in mobile app development, analytics projects, and lab sessions by providing coding guidance, trou-\nbleshooting assistance"
+      ],
+      "ground_truth": "The resume lists various technical skills including programming languages and frameworks.",
+      "performance": {
+        "retrieval_ms": 1063.6,
+        "reranking_ms": 537.0,
+        "llm_ms": 3708.1,
+        "total_ms": 5310.4
+      },
+      "latency_seconds": 5.31
+    },
+    {
+      "question": "What is the educational background mentioned in the document?",
+      "answer": "The educational background mentioned in the document is as follows:\n\n- Master of Science in Data Science and Analytics from Georgia State University in Atlanta, GA\n- Relevant coursework includes Database Systems, Machine Learning, Big Data Programming, Data Mining, and Computational Intelligence\n\nThis information can be found on page 1 of the document \"Koushik Manjunathan Sreevatsa.\"",
+      "contexts": [
+        "Koushik Manjunathan Sreevatsa\n\u2642phone(470) 680 - 6311 \u2014/envel\u2322pekoushiksreevatsa100@gmail.com \u2014/linkedinLinkedIn\nAI Engineer with experience buildingLLM-powered systems, machine learning models, and intelligent analytics plat-\nformsusing Python, Databricks, and Azure. Skilled in developingmulti-agent GenAI systems, ML pipelines, and scalable\ndata workflowsto automate analysis and support decision-making. Experienced withLangGraph, PySpark, Azure Machine\nLearning, and MLflowfor building production-oriented AI solutions.\nEDUCATION\nMaster of Science in Data Science and Analytics \u2014 GPA: 4.13 05/2025\nGeorgia State University , Atlanta, GA\nRelevant Coursework:Database Systems, Machine Learning, Big Data Programming, Data Mining, Computational Intelligence\nTECHNICAL SKILLS\n\u2013Programming & Data Processing:Python, SQL, Pandas,\nPySpark, Data Transformation\n\u2013Databases & Storage:PostgreSQL, Azure SQL, SQL Server,\nAzure Data Lake\n\u2013Cloud Platforms:Microsoft Azure, Azure Machine Learning,",
+        "Decision Tree, and XGBoost models.\n\u2013 Achieved83% F1-score and 89% ROC-AUCand deployed the best model usingAzure ML Managed Online Endpoints.\nInsurance Fraud Detection \u2014 Azure Databricks, PySpark\n\u2013 Built a scalable machine learning pipeline usingPySpark on Azure Databricksto analyze15,420+ insurance claims\nwith 33 features.\n\u2013 Applied categorical encoding techniques includingWeight of Evidence (WOE)and mean encoding to improve model\nlearning.\n\u2013 Trained classification models achieving anF1-score of 0.846.\nACADEMIC EXPERIENCE\nGraduate Teaching Assistant \u2014 Georgia State University 08/2023 \u2013 05/2025\n\u2013 Supported students in mobile app development, analytics projects, and lab sessions by providing coding guidance, trou-\nbleshooting assistance",
+        "\u2013 Reduced manual analytical workload by60%and accelerated operational planning by30%.\nPROJECT EXPERIENCE\nComputational Intelligence Approaches for Lung Cancer Prediction \u2014 Azure ML, Deep Learning\n\u2013 Built deep learning workflows usingAzure Machine Learning Workspace, Compute Clusters, and MLflowto compare\nCNN, ANN, MLP, FuzzyCNN, and ResNet models on lung cancer CT images.\n\u2013 Applied preprocessing includingresizing, normalization, and grayscale-to-RGB conversionto prepare medical image\ndatasets.\n\u2013 Achieved best performance withANN (97.27% accuracy)based on validation metrics.\nBankruptcy Prediction Using Machine Learning \u2014 Azure ML\n\u2013 Developed an end-to-end machine learning pipeline usingAzure Machine Learning Workspace and Compute Clusters\non78,000+ financial records.\n\u2013 Applied feature engineering and addressed class imbalance usingSMOTE; trained Logistic Regression, Random Forest,\nDecision Tree, and XGBoost models."
+      ],
+      "ground_truth": "The document mentions the educational qualifications and degrees obtained.",
+      "performance": {
+        "retrieval_ms": 166.2,
+        "reranking_ms": 244.8,
+        "llm_ms": 1614.6,
+        "total_ms": 2027.7
+      },
+      "latency_seconds": 2.03
+    }
+  ],
+  "config": {
+    "retriever_top_k": 10,
+    "reranker_top_k": 3,
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "llm_model": "gpt-3.5-turbo",
+    "embedding_model": "all-MiniLM-L6-v2"
+  }
+}
