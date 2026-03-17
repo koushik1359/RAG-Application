@@ -3,32 +3,34 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies required for ML packages
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first to leverage Docker cache
+# Install Python dependencies first for caching
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download the Hugging Face models so they don't download on every request
-# This makes cold starts much faster on Serverless platforms
+# Pre-download models to bake them into the image
+# This prevents downloading on every container start/scale-up
 RUN python -c "from sentence_transformers import CrossEncoder, SentenceTransformer; \
     SentenceTransformer('all-MiniLM-L6-v2'); \
     CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
 
-# Copy the rest of the application
+# Copy application source
 COPY . .
 
-# Create the documents directory just in case it's not checked into git
-RUN mkdir -p documents
+# Create necessary directories and set permissions
+RUN mkdir -p documents && chmod 777 documents
 
-# Expose port 8000 for FastAPI
+# Expose port
 EXPOSE 8000
 
-# Command to run the application using Uvicorn
+# Environment defaults
+ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
+
+# Start command
 CMD ["uvicorn", "backend.src.main:app", "--host", "0.0.0.0", "--port", "8000"]
