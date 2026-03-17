@@ -34,6 +34,9 @@ jobs:
           app_location: "/frontend"
           api_location: ""
           output_location: "dist"
+        env:
+          VITE_API_URL: https://rag-backend.graybay-76a165dd.westus2.azurecontainerapps.io
+          VITE_RAG_API_KEY: ${{ secrets.RAG_API_KEY }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
