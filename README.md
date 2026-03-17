@@ -53,7 +53,7 @@ This project is optimized for **Azure "Zero-Cost" Deployment**:
 - **Backend**: Deploys to *Azure Container Apps* (Consumption Tier - Free).
 - **Frontend**: Deploys to *Azure Static Web Apps* (Free Tier).
 
-Detailed instructions are available in the [Deployment Guide](C:\Users\koush\.gemini\antigravity\brain\2868e236-5e57-46d8-b0f8-de9b494085f9\azure_deployment_guide.md).
+Detailed instructions are available in the [Deployment Guide](./docs/deployment.md) (or check the repo wiki).
 
 ## 🛠️ Local Development
 
