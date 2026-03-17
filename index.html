@@ -552,6 +552,29 @@
             font-weight: 600;
         }
 
+        /* --- PERFORMANCE METRICS --- */
+        .perf-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .perf-chip {
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: rgba(0,0,0,0.3);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .perf-chip.total {
+            color: var(--success);
+            border-color: var(--success);
+        }
+
         /* Scrollbar Styling */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -869,7 +892,7 @@
                 const data = await response.json();
                 
                 loader.style.display = 'none';
-                appendMessage(data.answer, 'ai', data.sources);
+                appendMessage(data.answer, 'ai', data.sources, data.performance);
 
                 chatHistory.push({ role: 'user', content: text });
                 chatHistory.push({ role: 'ai', content: data.answer });
@@ -885,7 +908,7 @@
             }
         }
 
-        function appendMessage(text, sender, sources = []) {
+        function appendMessage(text, sender, sources = [], performance = null) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${sender}`;
             
@@ -893,6 +916,17 @@
             
             if (sources.length > 0) {
                 innerHTML += buildSourcesHTML(sources);
+            }
+
+            if (performance) {
+                innerHTML += `
+                    <div class="perf-bar">
+                        <span class="perf-chip">🔍 Retrieval: ${performance.retrieval_ms}ms</span>
+                        <span class="perf-chip">🎯 Re-Rank: ${performance.reranking_ms}ms</span>
+                        <span class="perf-chip">🤖 LLM: ${performance.llm_ms}ms</span>
+                        <span class="perf-chip total">⚡ Total: ${performance.total_ms}ms</span>
+                    </div>
+                `;
             }
 
             msgDiv.innerHTML = innerHTML;

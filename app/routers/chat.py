@@ -2,21 +2,23 @@
 routers/chat.py — Chat endpoint for the RAG pipeline.
 
 Handles incoming user questions, converts chat history to LangChain format,
-runs the RAG chain, and returns the answer with source citations.
+runs the RAG chain with re-ranking, and returns the answer with source
+citations and performance metrics.
 """
 
 from fastapi import APIRouter
 from langchain_core.messages import HumanMessage, AIMessage
 
 from app.models import ChatRequest
-from app.rag_engine import rag_chain
+from app.rag_engine import run_rag_pipeline
 
 router = APIRouter()
 
 
 @router.post("/chat")
 async def chat_endpoint(request: ChatRequest):
-    """Process a user question through the RAG pipeline with chat history."""
+    """Process a user question through the RAG pipeline with re-ranking."""
+    print(f"\n{'='*60}")
     print(f"Received question: {request.message}")
     print(f"Chat history length: {len(request.history)}")
     
@@ -28,20 +30,20 @@ async def chat_endpoint(request: ChatRequest):
         else:
             chat_history.append(AIMessage(content=msg.content))
     
-    # Run the RAG pipeline WITH chat history
-    response = rag_chain.invoke({
-        "input": request.message,
-        "chat_history": chat_history
-    })
+    # Run the full RAG pipeline (retrieve → re-rank → generate)
+    result = run_rag_pipeline(request.message, chat_history)
     
-    # Extract the sources so we can send them to the frontend
+    # Extract the sources from re-ranked documents
     sources = []
-    for doc in response["context"]:
+    for doc in result["context"]:
         source = doc.metadata.get("source", "Unknown")
         page = doc.metadata.get("page", "Unknown")
         sources.append({"source": source, "page": page, "content": doc.page_content})
+    
+    print(f"{'='*60}\n")
         
     return {
-        "answer": response["answer"],
-        "sources": sources
+        "answer": result["answer"],
+        "sources": sources,
+        "performance": result["performance"]
     }

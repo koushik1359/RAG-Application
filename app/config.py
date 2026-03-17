@@ -28,6 +28,11 @@ SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt", ".csv"}
 LLM_MODEL = "gpt-3.5-turbo"
 LLM_TEMPERATURE = 0
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-RETRIEVER_TOP_K = 3
+RETRIEVER_TOP_K = 10  # Retrieve more, then re-rank
+RERANKER_TOP_K = 3    # Keep the best 3 after re-ranking
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 100
+
+# --- Re-Ranker Settings ---
+RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
