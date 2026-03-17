@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-textMain min-h-screen font-sans antialiased overflow-hidden m-0 p-0;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-600;
+}
+
+/* Loader Animation */
+.dot-flashing {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: theme('colors.primary');
+  color: theme('colors.primary');
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+.dot-flashing::before {
+  left: -12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: theme('colors.primary');
+  color: theme('colors.primary');
+  animation: dot-flashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+.dot-flashing::after {
+  left: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: theme('colors.primary');
+  color: theme('colors.primary');
+  animation: dot-flashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+@keyframes dot-flashing {
+  0% { background-color: theme('colors.primary'); }
+  50%, 100% { background-color: rgba(99, 102, 241, 0.2); }
+}

@@ -36,3 +36,7 @@ CHUNK_OVERLAP = 100
 # --- Re-Ranker Settings ---
 RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
+# --- Security ---
+API_KEY = os.getenv("RAG_API_KEY", "rag-admin-secret-2026")
+ALLOWED_ORIGINS = ["http://localhost:5173"]
+

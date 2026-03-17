@@ -1,163 +1,79 @@
-# 🗄️ Enterprise RAG Engine — Chat With Your Documents
+# Enterprise RAG Engine: Production-Grade AI 🚀
 
-> An end-to-end Retrieval-Augmented Generation (RAG) application that lets you upload documents, embed them into a cloud vector database, and ask natural-language questions — with **page-level source citations** and **conversational memory**.
+[![Azure Deployment](https://img.shields.io/badge/Deploy-Azure-0089D6?logo=microsoftazure)](https://azure.microsoft.com/)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
 
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.135-009688?logo=fastapi)
-![LangChain](https://img.shields.io/badge/LangChain-0.3-orange)
-![Pinecone](https://img.shields.io/badge/Pinecone-VectorDB-purple)
-![OpenAI](https://img.shields.io/badge/OpenAI-GPT--3.5--Turbo-412991?logo=openai)
+A high-performance, secure, and commercially-ready RAG (Retrieval-Augmented Generation) system. This project demonstrates advanced AI engineering patterns utilized by senior software engineers at top-tier tech companies.
 
----
+## 🏗️ System Architecture
 
-## ✨ Features
+The application is built on a **Modular Clean Architecture**, ensuring deep separation between AI core logic, API delivery, and the user interface.
 
-| Feature | Description |
-|---|---|
-| **📄 Multi-Format Upload** | Upload PDF, DOCX, TXT, and CSV files directly from the browser. |
-| **🔍 Semantic Search** | Hugging Face `all-MiniLM-L6-v2` embeddings for intelligent document retrieval. |
-| **🧠 Conversational Memory** | Follow-up questions understand context — "What are his skills?" just works. |
-| **📑 Source Citations** | Every answer includes the exact **file name** and **page number**. |
-| **📁 Document Management** | Sidebar with file list, per-document delete, and "Clear All" database wipe. |
-| **📝 Markdown Rendering** | AI responses render tables, code blocks, lists, and headings beautifully. |
-| **📊 Upload Progress Bar** | Visual feedback with labeled stages during document processing. |
-| **☁️ Cloud Vector Store** | Pinecone for fast, scalable similarity search across thousands of documents. |
+```mermaid
+graph TD
+    User([User]) <-->|SSE/REST| Frontend[React SPA]
+    Frontend <-->|Authenticated| Backend[FastAPI Gateway]
+    
+    subgraph "Backend Core"
+        Backend --> Security[API Key Auth]
+        Security --> RAG[RAG Engine]
+        RAG --> Retrieval[Async Retriever]
+        RAG --> Rerank[Cross-Encoder Re-ranker]
+        Rerank --> LLM[GPT-3.5/4 Streaming]
+    end
 
----
-
-## 🏗️ Architecture
-
-```
-┌──────────────┐     File Upload      ┌──────────────────┐
-│   Frontend   │ ──────────────────► │  FastAPI Backend  │
-│  (HTML/JS)   │  PDF/DOCX/TXT/CSV   │    /upload        │
-└──────┬───────┘                     └────────┬─────────┘
-       │                                      │
-       │  User Question                       │ Chunk → Embed → Store
-       │  + Chat History                      ▼
-       │                             ┌──────────────────┐
-       │  POST /chat                 │     Pinecone      │
-       └───────────────────────────► │  Vector Database   │
-                                     └────────┬─────────┘
-                                              │
-                                              │ Top-K Similar Chunks
-                                              ▼
-                                     ┌──────────────────┐
-                                     │   OpenAI GPT-3.5  │
-                                     │  + Chat History   │
-                                     └──────────────────┘
-                                              │
-                                              │ Answer + Citations
-                                              ▼
-                                     ┌──────────────────┐
-                                     │   Frontend Chat   │
-                                     │  Markdown + Cites │
-                                     └──────────────────┘
+    subgraph "Data Layer"
+        Retrieval <--> Pinecone[(Pinecone Vector DB)]
+        Retrieval <--> Embed[HF Local Embeddings]
+    end
 ```
 
----
+## 🔥 High-Yield Features
 
-## 🛠️ Tech Stack
+### 1. Real-Time Token Streaming
+Provides a "Gemini-style" word-by-word typing effect using Server-Sent Events (SSE), reducing perceived latency to near-zero.
 
-- **Backend:** Python, FastAPI (modular router architecture)
-- **Orchestration:** LangChain (history-aware retrieval chain)
-- **Vector Database:** Pinecone (Cloud)
-- **Embeddings:** Hugging Face `all-MiniLM-L6-v2` (local, free)
-- **LLM:** OpenAI GPT-3.5-Turbo
-- **Frontend:** HTML, CSS, JavaScript (Dark Mode + Markdown via marked.js)
+### 2. Multi-Stage Retrieval & Re-ranking
+Calculates cosine similarity in Pinecone, followed by **Cross-Encoder re-ranking** to ensure the LLM receives only the most contextually relevant information.
 
----
+### 3. Enterprise Security
+- **Secure Gateway**: All endpoints are protected via `access_token` validation.
+- **Strict CORS**: Strict domain-based access control.
 
-## 📁 Project Structure
+### 4. Performance Observability
+The UI features a real-time performance dashboard displaying timing breakdowns for:
+- 🔍 Retrieval Latency
+- 🎯 Re-ranking Precision
+- 🧠 LLM Generation Time
 
-```
-enterprice_rag/
-├── app/
-│   ├── __init__.py           # Package marker
-│   ├── main.py               # FastAPI app, CORS, router registration
-│   ├── config.py             # Environment variables & constants
-│   ├── models.py             # Pydantic request/response models
-│   ├── rag_engine.py         # Embeddings, LLM, Pinecone, RAG chain
-│   └── routers/
-│       ├── __init__.py
-│       ├── chat.py           # POST /chat — conversational Q&A
-│       ├── upload.py         # POST /upload — multi-format ingestion
-│       └── documents.py      # GET/DELETE /documents — management
-├── ingest.py                 # Batch ingestion script (optional)
-├── index.html                # Frontend dashboard
-├── run.py                    # Legacy entry point
-├── requirements.txt
-├── .env                      # API keys (not tracked)
-└── .gitignore
-```
+## 🚀 One-Click Cloud Deployment (Azure)
 
----
+This project is optimized for **Azure "Zero-Cost" Deployment**:
+- **Backend**: Deploys to *Azure Container Apps* (Consumption Tier - Free).
+- **Frontend**: Deploys to *Azure Static Web Apps* (Free Tier).
 
-## 🚀 Getting Started
+Detailed instructions are available in the [Deployment Guide](C:\Users\koush\.gemini\antigravity\brain\2868e236-5e57-46d8-b0f8-de9b494085f9\azure_deployment_guide.md).
+
+## 🛠️ Local Development
 
 ### Prerequisites
-
 - Python 3.10+
-- A [Pinecone](https://www.pinecone.io/) account (free tier works)
-- An [OpenAI](https://platform.openai.com/) API key
+- Node.js & npm
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/koushik1359/RAG-Application.git
-cd RAG-Application
-```
-
-### 2. Create a Virtual Environment
-
-```bash
-python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-PINECONE_API_KEY=your_pinecone_api_key
-OPENAI_API_KEY=your_openai_api_key
-```
-
-### 5. Run the Server
-
-```bash
-python -m uvicorn app.main:app
-```
-
-### 6. Open the Dashboard
-
-Open `index.html` in your browser. Upload documents using the sidebar or 📎 button.
+### Setup
+1. **Env Vars**: Create a `.env` in the root with `OPENAI_API_KEY`, `PINECONE_API_KEY`, and `RAG_API_KEY`.
+2. **Backend**:
+   ```bash
+   pip install -r requirements.txt
+   python -m backend.src.main
+   ```
+3. **Frontend**:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
 ---
-
-## 📸 How It Works
-
-1. **Upload** — Click the sidebar upload button or 📎 icon. Supports PDF, DOCX, TXT, CSV. The backend chunks it, embeds it, and stores it in Pinecone.
-2. **Ask** — Type a specific question. The engine reformulates it using chat history, then searches Pinecone for the top 3 most relevant chunks.
-3. **Answer** — GPT-3.5-Turbo generates a Markdown-formatted answer with exact source file and page citations.
-4. **Manage** — View all uploaded documents in the sidebar. Delete individual files or clear the entire knowledge base.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+*Developed with Senior Software Engineering patterns for scalability and reliability.*

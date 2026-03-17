@@ -1,0 +1,18 @@
+# Virtual environment
+venv/
+venv2/
+.env
+
+# Python compilation files
+__pycache__/
+*.pyc
+*.pyo
+
+# Documents and Database
+documents/
+evaluation_results/
+ragas_report*.json
+
+# Jupyter Notebooks and Git
+.ipynb_checkpoints/
+.git/

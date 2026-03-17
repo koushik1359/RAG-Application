@@ -3,13 +3,24 @@ venv/
 venv2/
 .env
 
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
 # Cache
 __pycache__/
 *.pyc
 .pytest_cache/
 
+# IDE
+.vscode/
+.idea/
+
 # User Documents
 documents/
+evaluation_results/
 
 # Logs
 *.log
