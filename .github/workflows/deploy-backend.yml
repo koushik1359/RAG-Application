@@ -58,3 +58,4 @@ jobs:
           containerAppName: rag-backend
           resourceGroup: RAG-Resources
           containerAppEnvironment: RAG-Free-Env
+          targetPort: 8000
