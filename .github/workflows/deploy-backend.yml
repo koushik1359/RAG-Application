@@ -66,7 +66,7 @@ jobs:
           resourceGroup: RAG-Resources
           containerAppEnvironment: RAG-Free-Env
           targetPort: 8000
-          env: |
+          environmentVariables: >-
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}
             RAG_API_KEY=${{ secrets.RAG_API_KEY }}
